@@ -5,9 +5,10 @@ import type { Request, Response } from 'express'
 export class BudgetController {
   static createBudget = async (req: Request, res: Response) => {
     try {
-      const budget = new Budget(req.body)
+      const budget = await Budget.create(req.body)
+      budget.userId = req.user.id
       await budget.save()
-      res.status(201).send('Presupuesto creado correctamente')
+      res.status(201).json('Presupuesto creado correctamente')
     } catch (error) {
       res.status(500).json({ error: 'Hubo un error' })
     }
@@ -17,8 +18,10 @@ export class BudgetController {
     try {
       const budgets = await Budget.findAll({
         order: [['createdAt', 'DESC']],
+        where: {
+          userId: req.user.id,
+        },
       })
-      // TODO: Filtrar presupuestos por usuario autenticado
       res.json(budgets)
     } catch (error) {
       res.status(500).json({ error: 'Hubo un error' })
@@ -34,11 +37,11 @@ export class BudgetController {
 
   static updateBudgetById = async (req: Request, res: Response) => {
     await req.budget.update(req.body)
-    res.send('Presupuesto actualizado correctamente')
+    res.json('Presupuesto actualizado correctamente')
   }
 
   static deleteBudgetById = async (req: Request, res: Response) => {
     await req.budget.destroy()
-    res.send('Presupuesto eliminado correctamente')
+    res.json('Presupuesto eliminado correctamente')
   }
 }

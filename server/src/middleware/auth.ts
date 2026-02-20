@@ -21,14 +21,12 @@ export const authenticate = async (
     res.status(401).json({ error: error.message })
     return
   }
-
   const [, token] = bearer.split(' ')
   if (!token) {
     const error = new Error('Token no válido')
     res.status(401).json({ error: error.message })
     return
   }
-
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET)
     if (typeof decoded === 'object' && decoded.id) {

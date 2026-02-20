@@ -28,7 +28,7 @@ export class AuthEmail {
   }
 
   static sendPasswordResetToken = async (user: EmailType) => {
-    const resetUrl = `${process.env.FRONTEND_URL}/auth/reset-password`
+    const resetUrl = `${process.env.FRONTEND_URL}/auth/new-password`
 
     const email = await transport.sendMail({
       from: 'CashTrackr <admin@cashtrackr.com>',

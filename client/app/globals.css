@@ -1,0 +1,5 @@
+@import 'tailwindcss';
+@theme {
+  --background-image-auth: url('/grafico.svg');
+  --background-size-custom: 30rem;
+}

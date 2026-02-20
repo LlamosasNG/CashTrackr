@@ -36,8 +36,7 @@ export const validateBudgetExists = async (
     const budget = await Budget.findByPk(budgetId)
     if (!budget) {
       const error = new Error('Presupuesto no encontrado')
-      res.status(404).json({ error: error.message })
-      return
+      return res.status(404).json({ error: error.message })
     }
     req.budget = budget
     next()
@@ -63,5 +62,18 @@ export const validateBudgetInput = async (
     .custom((value) => value > 0)
     .withMessage('La cantidad del presupuesto debe ser mayor a 0')
     .run(req)
+  next()
+}
+
+export const hasAccess = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  if (req.budget.userId !== req.user.id) {
+    const error = new Error('Acción no válida')
+    res.status(401).json({ error: error.message })
+    return
+  }
   next()
 }

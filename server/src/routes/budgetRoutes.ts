@@ -1,7 +1,9 @@
 import { BudgetController } from '@/controllers/BudgetController'
 import { ExpenseController } from '@/controllers/ExpenseController'
+import { authenticate } from '@/middleware/auth'
 import { Router } from 'express'
 import {
+  hasAccess,
   validateBudgetExists,
   validateBudgetId,
   validateBudgetInput,
@@ -14,9 +16,12 @@ import { handleInputErrors } from '../middleware/validation'
 
 const router: Router = Router()
 
+router.use(authenticate)
+
 /** Budgets */
 router.param('budgetId', validateBudgetId)
 router.param('budgetId', validateBudgetExists)
+router.param('budgetId', hasAccess)
 
 router.post(
   '/',

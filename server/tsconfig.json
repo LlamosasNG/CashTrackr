@@ -13,7 +13,8 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "skipLibCheck": true,
-    "baseUrl": ".",
+    "isolatedModules": true,
+    "baseUrl": "./",
     "paths": {
       "@/*": ["src/*"],
       "@models/*": ["src/models/*"],
@@ -22,7 +23,8 @@
       "@services/*": ["src/services/*"],
       "@routes/*": ["src/routes/*"],
       "@utils/*": ["src/utils/*"],
-      "@config/*": ["src/config/*"]
+      "@config/*": ["src/config/*"],
+      "@tests/*": ["src/tests/*"]
     }
   },
   "ts-node": {

@@ -10,7 +10,8 @@
     "server": "nodemon src/index.ts",
     "server:api": "nodemon --exec ts-node -r tsconfig-paths/register src/index.ts --api",
     "build": "tsc",
-    "start": "node ./dist/index.js"
+    "start": "node ./dist/index.js",
+    "test": "jest"
   },
   "dependencies": {
     "bcrypt": "6.0.0",
@@ -29,14 +30,19 @@
   "devDependencies": {
     "@types/bcrypt": "6.0.0",
     "@types/express": "5.0.3",
+    "@types/jest": "30.0.0",
     "@types/jsonwebtoken": "9.0.10",
     "@types/morgan": "1.9.10",
     "@types/node": "24.7.1",
     "@types/nodemailer": "7.0.2",
+    "jest": "30.2.0",
+    "node-mocks-http": "1.17.2",
     "nodemon": "3.1.10",
+    "ts-jest": "29.4.5",
     "ts-node": "10.9.2",
     "tsc-alias": "1.8.16",
     "tsconfig-paths": "4.2.0",
+    "tsconfig-paths-jest": "0.0.1",
     "typescript": "5.9.3"
   },
   "packageManager": "pnpm@10.18.2+sha512.9fb969fa749b3ade6035e0f109f0b8a60b5d08a1a87fdf72e337da90dcc93336e2280ca4e44f2358a649b83c17959e9993e777c2080879f3801e6f0d999ad3dd"

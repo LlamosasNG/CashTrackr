@@ -14,8 +14,7 @@ export class AuthController {
       const error = new Error(
         'Un usuario ya esta registrado con el mismo email'
       )
-      res.status(409).json({ error: error.message })
-      return
+      return res.status(409).json({ error: error.message })
     }
     try {
       const user = new User(req.body)
@@ -27,7 +26,7 @@ export class AuthController {
         email: user.email,
         token: user.token,
       })
-      res.send('Cuenta creada correctamente, revisa tu email para confirmarla')
+      res.json('Cuenta creada correctamente, revisa tu email para confirmarla')
     } catch (error) {
       res.status(500).send('Hubo un error')
     }
@@ -38,13 +37,12 @@ export class AuthController {
     const user = await User.findOne({ where: { token } })
     if (!user) {
       const error = new Error('Token no válido')
-      res.status(401).json({ error: error.message })
-      return
+      return res.status(401).json({ error: error.message })
     }
     user.confirmed = true
     user.token = null
     await user.save()
-    res.send('Cuenta confirmada correctamente')
+    res.json('Cuenta confirmada correctamente')
   }
 
   static login = async (req: Request, res: Response) => {
@@ -87,7 +85,7 @@ export class AuthController {
       email: user.email,
       token: user.token,
     })
-    res.send('Revisa tu email para reestablecer tu contraseña')
+    res.json('Revisa tu email para reestablecer tu contraseña')
   }
 
   static validateToken = async (req: Request, res: Response) => {
@@ -99,7 +97,7 @@ export class AuthController {
       res.status(404).json({ error: error.message })
       return
     }
-    res.send('Token válido')
+    res.json('Token válido, asigna una nueva contraseña')
   }
 
   static resetPassword = async (req: Request, res: Response) => {
@@ -116,10 +114,42 @@ export class AuthController {
     user.token = null
     user.save()
 
-    res.send('Contraseña actualizada correctamente')
+    res.json('Contraseña actualizada correctamente')
   }
 
   static user = async (req: Request, res: Response) => {
     res.json(req.user)
+  }
+
+  static updateCurrentUserPassword = async (req: Request, res: Response) => {
+    const { current_password, password } = req.body
+    const { id } = req.user
+    const user = await User.findByPk(id)
+    const isPasswordCorrect = await checkPassword(
+      current_password,
+      user.password
+    )
+    if (!isPasswordCorrect) {
+      const error = new Error('Tu contraseña actual es incorrecta')
+      res.json({ error: error.message })
+      return
+    }
+    user.password = await hashPassword(password)
+    await user.save()
+
+    res.json('Contraseña actualizada correctamente')
+  }
+
+  static checkPassword = async (req: Request, res: Response) => {
+    const { password } = req.body
+    const { id } = req.user
+    const user = await User.findByPk(id)
+    const isPasswordCorrect = await checkPassword(password, user.password)
+    if (!isPasswordCorrect) {
+      const error = new Error('Contraseña incorrecta')
+      res.json({ error: error.message })
+      return
+    }
+    res.json('Contraseña correcta')
   }
 }
