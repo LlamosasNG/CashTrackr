@@ -1,5 +1,6 @@
 import { z } from 'zod'
 
+/** Autenticación de Usuarios */
 export const RegisterSchema = z
   .object({
     email: z.email('El correo electrónico es obligatorio'),
@@ -16,11 +17,6 @@ export const RegisterSchema = z
 export const LoginSchema = z.object({
   email: z.email({ message: 'Email no válido' }),
   password: z.string().min(1, { message: 'El password no puede ir vacio' }),
-})
-export type RegisterFormData = z.infer<typeof RegisterSchema>
-export const SuccessSchema = z.string()
-export const ErrorResponseSchema = z.object({
-  error: z.string(),
 })
 export const TokenSchema = z
   .string({ message: 'Token no válido' })
@@ -46,3 +42,29 @@ export const ResetPasswordSchema = z
     message: 'Las contraseñas no son iguales',
     path: ['password_confirmation'],
   })
+
+export const SuccessResponseSchema = z.string()
+export const ErrorResponseSchema = z.object({
+  error: z.string(),
+})
+
+/** Presupuestos */
+export const DraftBudgetSchema = z.object({
+  name: z
+    .string()
+    .min(1, { message: 'El Nombre del presupuesto es obligatorio' }),
+  amount: z.coerce
+    .number({ message: 'Cantidad no válida' })
+    .min(1, { message: 'Cantidad no válida' }),
+})
+
+export const BudgetAPIResponseSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  amount: z.string(),
+  userId: z.number(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
+})
+export const BudgetsAPIResponseSchema = z.array(BudgetAPIResponseSchema)
+export type Budget = z.infer<typeof BudgetAPIResponseSchema>

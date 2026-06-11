@@ -9,6 +9,7 @@ module.exports = {
     '^@controllers/(.*)$': '<rootDir>/src/controllers/$1',
     '^@middleware/(.*)$': '<rootDir>/src/middleware/$1',
     '^@utils/(.*)$': '<rootDir>/src/utils/$1',
+    '^@mocks/(.*)$': '<rootDir>/src/tests/mocks/$1',
   },
   transform: {
     '^.+\\.ts$': [

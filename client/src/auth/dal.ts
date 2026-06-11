@@ -3,9 +3,10 @@ import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { cache } from 'react'
 import { UserSchema } from '../schemas'
+import getToken from '@/src/auth/token'
 
 export const verifySession = cache(async () => {
-  const token = (await cookies()).get('CASHTRACKR_TOKEN')?.value
+  const token = await getToken()
   if (!token) {
     redirect('/auth/login')
   }

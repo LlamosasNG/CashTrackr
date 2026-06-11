@@ -2,15 +2,19 @@
 
 import {
   ErrorResponseSchema,
-  RegisterFormData,
   RegisterSchema,
-  SuccessSchema,
+  SuccessResponseSchema,
 } from '@/src/schemas'
 
 type ActionStateType = {
   errors: string[]
   success: string
-  formData: Partial<RegisterFormData>
+  formData?: {
+    email: string
+    name: string
+    password: string
+    password_confirmation: string
+  }
 }
 
 export async function register(prevState: ActionStateType, formData: FormData) {
@@ -23,9 +27,8 @@ export async function register(prevState: ActionStateType, formData: FormData) {
   const register = RegisterSchema.safeParse(registerData)
 
   if (!register.success) {
-    const errors = register.error.issues.map((error) => error.message)
     return {
-      errors,
+      errors: register.error.issues.map((error) => error.message),
       success: '',
       formData: registerData,
     }
@@ -52,11 +55,10 @@ export async function register(prevState: ActionStateType, formData: FormData) {
       formData: registerData,
     }
   }
-  const success = SuccessSchema.parse(json)
+  const success = SuccessResponseSchema.parse(json)
 
   return {
     errors: [],
     success,
-    formData: {},
   }
 }

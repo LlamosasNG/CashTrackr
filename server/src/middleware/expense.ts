@@ -1,5 +1,5 @@
 import Expense from '@/models/Expense'
-import { NextFunction, Request, Response } from 'express'
+import { NextFunction, Request, RequestParamHandler, Response } from 'express'
 import { body, param, validationResult } from 'express-validator'
 
 declare global {
@@ -26,13 +26,13 @@ export const validateExpenseId = async (
   next()
 }
 
-export const validateExpenseExists = async (
+export const validateExpenseExists: RequestParamHandler = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
+  expenseId
 ) => {
   try {
-    const { expenseId } = req.params
     const expense = await Expense.findByPk(expenseId)
     if (!expense) {
       const error = new Error('Gasto no encontrado')

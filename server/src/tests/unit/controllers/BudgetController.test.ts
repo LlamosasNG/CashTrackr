@@ -1,8 +1,9 @@
 import { BudgetController } from '@/controllers/BudgetController'
 import Budget from '@/models/Budget'
 import Expense from '@/models/Expense'
+import { MockRes } from '@/tests/types'
 import { createRequest, createResponse } from 'node-mocks-http'
-import { budgets } from '../../mocks/budgets'
+import { budgets } from '@/tests/mocks/budgets'
 
 jest.mock('@/models/Budget', () => ({
   findAll: jest.fn(),
@@ -26,7 +27,7 @@ describe('BudgetController.getAll', () => {
       url: '/api/budgets',
       user: { id: 1 },
     })
-    const res = createResponse()
+    const res = createResponse() as MockRes
     await BudgetController.getAllBudgets(req, res)
     const data = res._getJSONData()
     expect(data).toHaveLength(2)
@@ -40,7 +41,7 @@ describe('BudgetController.getAll', () => {
       url: '/api/budgets',
       user: { id: 2 },
     })
-    const res = createResponse()
+    const res = createResponse() as MockRes
     await BudgetController.getAllBudgets(req, res)
     const data = res._getJSONData()
     expect(data).toHaveLength(1)
@@ -54,7 +55,7 @@ describe('BudgetController.getAll', () => {
       url: '/api/budgets',
       user: { id: 10 },
     })
-    const res = createResponse()
+    const res = createResponse() as MockRes
     await BudgetController.getAllBudgets(req, res)
     const data = res._getJSONData()
     expect(data).toHaveLength(0)
@@ -68,7 +69,7 @@ describe('BudgetController.getAll', () => {
       url: '/api/budgets',
       user: { id: 100 },
     })
-    const res = createResponse()
+    const res = createResponse() as MockRes
     ;(Budget.findAll as jest.Mock).mockRejectedValue(new Error())
     await BudgetController.getAllBudgets(req, res)
 
@@ -89,7 +90,7 @@ describe('BudgetController.createBudget', () => {
       user: { id: 1 },
       body: { name: 'Presupuesto de Prueba', amount: 1000 },
     })
-    const res = createResponse()
+    const res = createResponse() as MockRes
     await BudgetController.createBudget(req, res)
 
     const data = res._getJSONData()
@@ -113,7 +114,7 @@ describe('BudgetController.createBudget', () => {
       body: { name: 'Presupuesto de Prueba', amount: 1000 },
     })
 
-    const res = createResponse()
+    const res = createResponse() as MockRes
     await BudgetController.createBudget(req, res)
 
     const data = res._getJSONData()
@@ -140,7 +141,7 @@ describe('BudgetController.getBudgetById', () => {
       url: '/api/budgets/:budgetId',
       budget: { id: 1 },
     })
-    const res = createResponse()
+    const res = createResponse() as MockRes
     await BudgetController.getBudgetById(req, res)
 
     const data = res._getJSONData()
@@ -160,7 +161,7 @@ describe('BudgetController.getBudgetById', () => {
       url: '/api/budgets/:id',
       budget: { id: 2 },
     })
-    const res = createResponse()
+    const res = createResponse() as MockRes
     await BudgetController.getBudgetById(req, res)
 
     const data = res._getJSONData()
@@ -180,7 +181,7 @@ describe('BudgetController.getBudgetById', () => {
       url: '/api/budgets/:id',
       budget: { id: 3 },
     })
-    const res = createResponse()
+    const res = createResponse() as MockRes
     await BudgetController.getBudgetById(req, res)
 
     const data = res._getJSONData()
@@ -207,7 +208,7 @@ describe('BudgetController.updateBudgetById', () => {
       budget: budgetMock,
       body: { name: 'Presupuesto de Prueba', amount: 1000 },
     })
-    const res = createResponse()
+    const res = createResponse() as MockRes
     await BudgetController.updateBudgetById(req, res)
 
     const data = res._getJSONData()
@@ -230,7 +231,7 @@ describe('BudgetController.deleteBudgetById', () => {
       url: '/api/budgets/:budgetId',
       budget: budgetMock,
     })
-    const res = createResponse()
+    const res = createResponse() as MockRes
     await BudgetController.deleteBudgetById(req, res)
 
     const data = res._getJSONData()

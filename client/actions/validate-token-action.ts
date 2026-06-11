@@ -1,6 +1,10 @@
 'use server'
 
-import { ErrorResponseSchema, SuccessSchema, TokenSchema } from '@/src/schemas'
+import {
+  ErrorResponseSchema,
+  SuccessResponseSchema,
+  TokenSchema,
+} from '@/src/schemas'
 
 type ActionStateType = {
   errors: string[]
@@ -26,14 +30,14 @@ export async function validateToken(token: string, prevState: ActionStateType) {
     }),
   })
   const json = await req.json()
-  if(!req.ok) {
-    const { error } = ErrorResponseSchema.parse(json) 
+  if (!req.ok) {
+    const { error } = ErrorResponseSchema.parse(json)
     return {
       errors: [error],
-      success: ''
+      success: '',
     }
   }
-  const success = SuccessSchema.parse(json)
+  const success = SuccessResponseSchema.parse(json)
   return {
     errors: [],
     success,

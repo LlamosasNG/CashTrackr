@@ -1,13 +1,14 @@
 import { hasAccess, validateBudgetExists } from '@/middleware/budget'
 import Budget from '@/models/Budget'
 import { budgets } from '@/tests/mocks/budgets'
+import { MockRes } from '@/tests/types'
 import { createRequest, createResponse } from 'node-mocks-http'
 
 jest.mock('@/models/Budget', () => ({
   findByPk: jest.fn(),
 }))
 
-describe('Budget Middleware - validateBudgetExists', () => {
+describe('Budgets Middleware - validateBudgetExists', () => {
   it('Should handle non-existent budget', async () => {
     ;(Budget.findByPk as jest.Mock).mockResolvedValue(null)
     const req = createRequest({
@@ -15,25 +16,25 @@ describe('Budget Middleware - validateBudgetExists', () => {
         budgetId: 1,
       },
     })
-    const res = createResponse()
+    const res = createResponse() as MockRes
     const next = jest.fn()
-    await validateBudgetExists(req, res, next)
+    await validateBudgetExists(req, res, next, 1, 'budgetId')
     const data = res._getJSONData()
     expect(res.statusCode).toBe(404)
     expect(data).toEqual({ error: 'Presupuesto no encontrado' })
     expect(next).not.toHaveBeenCalled()
   })
 
-  it('Should handle non-existent budget error', async () => {
+  it('Should handle internal server error', async () => {
     ;(Budget.findByPk as jest.Mock).mockRejectedValue(new Error())
     const req = createRequest({
       params: {
         budgetId: 1,
       },
     })
-    const res = createResponse()
+    const res = createResponse() as MockRes
     const next = jest.fn()
-    await validateBudgetExists(req, res, next)
+    await validateBudgetExists(req, res, next, 1, 'budgetId')
     const data = res._getJSONData()
     expect(res.statusCode).toBe(500)
     expect(data).toEqual({ error: 'Hubo un error' })
@@ -47,21 +48,21 @@ describe('Budget Middleware - validateBudgetExists', () => {
         budgetId: 1,
       },
     })
-    const res = createResponse()
+    const res = createResponse() as MockRes
     const next = jest.fn()
-    await validateBudgetExists(req, res, next)
+    await validateBudgetExists(req, res, next, 1, 'budgetId')
     expect(next).toHaveBeenCalled()
     expect(req.budget).toEqual(budgets[0])
   })
 })
 
-describe('Budget Middleware - hasAccess', () => {
+describe('Budgets Middleware - hasAccess', () => {
   it('Should call next() if user has access to budget', () => {
     const req = createRequest({
       budget: budgets[0],
       user: { id: 1 },
     })
-    const res = createResponse()
+    const res = createResponse() as MockRes
     const next = jest.fn()
 
     hasAccess(req, res, next)
@@ -74,7 +75,7 @@ describe('Budget Middleware - hasAccess', () => {
       budget: budgets[0],
       user: { id: 2 },
     })
-    const res = createResponse()
+    const res = createResponse() as MockRes
     const next = jest.fn()
 
     hasAccess(req, res, next)

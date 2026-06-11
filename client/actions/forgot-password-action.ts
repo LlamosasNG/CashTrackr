@@ -3,7 +3,7 @@
 import {
   ErrorResponseSchema,
   ForgotPasswordSchema,
-  SuccessSchema,
+  SuccessResponseSchema,
 } from '@/src/schemas'
 
 type ActionStateType = {
@@ -43,7 +43,7 @@ export async function forgotPassword(
       success: '',
     }
   }
-  const success = SuccessSchema.parse(json)
+  const success = SuccessResponseSchema.parse(json)
   return {
     errors: [],
     success,

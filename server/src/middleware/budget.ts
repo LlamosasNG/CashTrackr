@@ -1,5 +1,10 @@
 import Budget from '@/models/Budget'
-import type { NextFunction, Request, Response } from 'express'
+import type {
+  NextFunction,
+  Request,
+  RequestParamHandler,
+  Response,
+} from 'express'
 import { body, param, validationResult } from 'express-validator'
 
 declare global {
@@ -26,13 +31,13 @@ export const validateBudgetId = async (
   next()
 }
 
-export const validateBudgetExists = async (
+export const validateBudgetExists: RequestParamHandler = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
+  budgetId
 ) => {
   try {
-    const { budgetId } = req.params
     const budget = await Budget.findByPk(budgetId)
     if (!budget) {
       const error = new Error('Presupuesto no encontrado')

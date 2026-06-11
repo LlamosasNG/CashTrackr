@@ -1,6 +1,7 @@
 import { ExpenseController } from '@/controllers/ExpenseController'
 import Expense from '@/models/Expense'
 import { expenses } from '@/tests/mocks/expense'
+import { MockRes } from '@/tests/types'
 import { createRequest, createResponse } from 'node-mocks-http'
 
 jest.mock('@/models/Expense', () => ({
@@ -19,7 +20,7 @@ describe('ExpenseController.createExpense', () => {
       body: { name: 'Gasto de Prueba', amount: 5000 },
       budget: { id: 1 },
     })
-    const res = createResponse()
+    const res = createResponse() as MockRes
     await ExpenseController.createExpense(req, res)
 
     expect(res.statusCode).toBe(201)
@@ -40,7 +41,7 @@ describe('ExpenseController.createExpense', () => {
       body: { name: 'Gasto de Prueba', amount: 5000 },
       budget: { id: 1 },
     })
-    const res = createResponse()
+    const res = createResponse() as MockRes
     await ExpenseController.createExpense(req, res)
 
     expect(res.statusCode).toBe(500)
@@ -57,7 +58,7 @@ describe('ExpenseController.getExpenseById', () => {
       url: 'api/budgets/:budgetId/expenses/:expenseId',
       expense: expenses[0],
     })
-    const res = createResponse()
+    const res = createResponse() as MockRes
 
     await ExpenseController.getExpenseById(req, res)
     expect(res.statusCode).toBe(200)
@@ -77,7 +78,7 @@ describe('ExpenseController.updateExpenseById', () => {
       expense: expenseMock,
       body: { name: 'Presupuesto de Prueba Actualizado', amount: 5500 },
     })
-    const res = createResponse()
+    const res = createResponse() as MockRes
 
     await ExpenseController.updateExpenseById(req, res)
     expect(res.statusCode).toBe(200)
@@ -99,7 +100,7 @@ describe('ExpenseController.deleteExpenseById', () => {
       url: 'api/budgets/:budgetId/expenses/:expenseId',
       expense: expenseMock,
     })
-    const res = createResponse()
+    const res = createResponse() as MockRes
 
     await ExpenseController.deleteExpenseById(req, res)
     expect(res.statusCode).toBe(200)

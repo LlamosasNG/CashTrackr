@@ -1,6 +1,7 @@
 'use client'
 
 import { logout } from '@/actions/logout-user-action'
+import { User } from '@/src/schemas'
 import {
   Popover,
   PopoverButton,
@@ -10,7 +11,6 @@ import {
 import { Bars3Icon } from '@heroicons/react/20/solid'
 import Link from 'next/link'
 import { Fragment } from 'react'
-import { User } from '../schemas'
 
 export default function AdminMenu({ user }: { user: User }) {
   return (

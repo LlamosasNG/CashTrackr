@@ -1,6 +1,6 @@
+import AdminMenu from '@/components/admin/AdminMenu'
 import Logo from '@/components/ui/Logo'
 import ToastifyNotification from '@/components/ui/ToastifyNotification'
-import AdminMenu from '@/src/admin/AdminMenu'
 import { verifySession } from '@/src/auth/dal'
 import Link from 'next/link'
 

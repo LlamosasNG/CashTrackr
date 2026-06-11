@@ -2,30 +2,25 @@
 
 import { register } from '@/actions/create-account-action'
 import { useActionState, useEffect, useRef } from 'react'
-import ErrorMessage from '../ui/ErrorMessage'
-import SuccessMessage from '../ui/SuccessMessage'
+import { toast } from 'react-toastify'
 
 export default function RegisterForm() {
   const ref = useRef<HTMLFormElement>(null)
   const [state, dispatch] = useActionState(register, {
     errors: [],
     success: '',
-    formData: {},
   })
 
   useEffect(() => {
+    if (state.errors) state.errors.forEach((error) => toast.error(error))
     if (state.success) {
+      toast.success(state.success)
       ref.current?.reset()
     }
   }, [state])
 
   return (
     <form ref={ref} noValidate action={dispatch} className="mt-14 space-y-5">
-      {state.errors.map((error) => (
-        <ErrorMessage key={error}>{error}</ErrorMessage>
-      ))}
-      {state.success && <SuccessMessage>{state.success}</SuccessMessage>}
-
       <div className="flex flex-col gap-2">
         <label className="font-bold text-2xl" htmlFor="email">
           Email
@@ -36,35 +31,31 @@ export default function RegisterForm() {
           placeholder="Email de Registro"
           className="w-full border border-gray-300 p-3 rounded-lg"
           name="email"
-          defaultValue={
-            (state.formData as Partial<{ email: string }>).email ?? ''
-          }
+          defaultValue={state.formData?.email ?? ''}
         />
       </div>
 
       <div className="flex flex-col gap-2">
         <label className="font-bold text-2xl">Nombre</label>
         <input
+          id="name"
           type="name"
           placeholder="Nombre de Registro"
           className="w-full border border-gray-300 p-3 rounded-lg"
           name="name"
-          defaultValue={
-            (state.formData as Partial<{ name: string }>).name ?? ''
-          }
+          defaultValue={state.formData?.name ?? ''}
         />
       </div>
 
       <div className="flex flex-col gap-2">
         <label className="font-bold text-2xl">Password</label>
         <input
+          id="password"
           type="password"
           placeholder="Password de Registro"
           className="w-full border border-gray-300 p-3 rounded-lg"
           name="password"
-          defaultValue={
-            (state.formData as Partial<{ password: string }>).password ?? ''
-          }
+          defaultValue={state.formData?.password ?? ''}
         />
       </div>
 
@@ -76,10 +67,7 @@ export default function RegisterForm() {
           placeholder="Repite Password de Registro"
           className="w-full border border-gray-300 p-3 rounded-lg"
           name="password_confirmation"
-          defaultValue={
-            (state.formData as Partial<{ password_confirmation: string }>)
-              .password_confirmation ?? ''
-          }
+          defaultValue={state.formData?.password_confirmation ?? ''}
         />
       </div>
 
